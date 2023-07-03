@@ -3,6 +3,8 @@
 const fs = require('fs')
 const config = require('config-yml')
 const express = require('express')
+const { Router } = require('express')
+const serverless = require('serverless-http')
 const compression = require('compression')
 
 const db = require('./db')
@@ -10,19 +12,20 @@ const themify = require('./utils/themify')
 
 const PLACES = 7
 
-const app = express()
+const api = express()
+const router = Router()
 
-app.use(express.static('assets'))
-app.use(compression())
-app.set('view engine', 'pug')
+api.use(express.static('assets'))
+api.use(compression())
+api.set('view engine', 'pug')
 
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
   const site = config.app.site || `${req.protocol}://${req.get('host')}`
   res.render('index', { site })
 });
 
 // get the image
-app.get('/get/@:name', async (req, res) => {
+router.get('/get/@:name', async (req, res) => {
   const { name } = req.params
   const { theme = 'moebooru' } = req.query
   let length = PLACES
@@ -50,7 +53,7 @@ app.get('/get/@:name', async (req, res) => {
 })
 
 // JSON record
-app.get('/record/@:name', async (req, res) => {
+router.get('/record/@:name', async (req, res) => {
   const { name } = req.params
 
   const data = await getCountByName(name)
@@ -58,7 +61,7 @@ app.get('/record/@:name', async (req, res) => {
   res.json(data)
 })
 
-app.get('/heart-beat', (req, res) => {
+router.get('/heart-beat', (req, res) => {
   res.set({
     'cache-control': 'max-age=0, no-cache, no-store, must-revalidate'
   })
@@ -123,3 +126,5 @@ async function getCountByName(name) {
 
   }
 }
+
+export const handler = serverless(api);
