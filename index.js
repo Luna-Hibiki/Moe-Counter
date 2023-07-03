@@ -70,6 +70,8 @@ router.get('/heart-beat', (req, res) => {
   console.log('heart-beat')
 });
 
+api.use('/api/', router)
+
 const listener = app.listen(config.app.port || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
 })

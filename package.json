@@ -11,6 +11,7 @@
   "author": "journey-ad",
   "license": "MIT",
   "dependencies": {
+    "@netlify/functions": "^1.6.0",
     "better-sqlite3": "^8.1.0",
     "compression": "^1.7.4",
     "config-yml": "^0.10.3",
@@ -18,6 +19,7 @@
     "image-size": "^0.8.3",
     "mime-types": "^2.1.27",
     "mongoose": "^5.9.28",
-    "pug": "^3.0.0"
+    "pug": "^3.0.0",
+    "serverless-http": "^3.2.0"
   }
 }
